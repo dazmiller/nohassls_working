@@ -936,7 +936,301 @@ func DeleteMortgageInsurances(id int) (err error) {
 	return
 }
 
+type Providers struct {
+	Id             int       `orm:"column(ID);auto"`
+	CompanyName    string    `orm:"column(CompanyName);size(45);null"`
+	CompanyCode    string    `orm:"column(CompanyCode);size(45);null"`
+	Phone1         string    `orm:"column(Phone1);size(45);null"`
+	Phone2         string    `orm:"column(Phone2);size(45);null"`
+	Email          string    `orm:"column(Email);size(45);null"`
+	Fax            string    `orm:"column(Fax);size(45);null"`
+	Website        string    `orm:"column(Website);size(45);null"`
+	Information    string    `orm:"column(Information);size(255);null"`
+	SectorCoverage string    `orm:"column(SectorCoverage);size(255);null"`
+	Active         int       `orm:"column(active);null"`
+	Country        string    `orm:"column(Country);size(45);null"`
+	MailAddress    string    `orm:"column(MailAddress);size(255);null"`
+	OperationHours string    `orm:"column(OperationHours);size(255);null"`
+	OfficeAddress  string    `orm:"column(OfficeAddress);size(255);null"`
+	Phone3         string    `orm:"column(Phone3);size(45);null"`
+	MemberSince    time.Time `orm:"column(MemberSince);type(date);null"`
+}
+
+func (t *Providers) TableName() string {
+	return "providers"
+}
+
+// AddProviders insert a new Providers into database and returns
+// last inserted Id on success.
+func AddProviders(m *Providers) (id int64, err error) {
+	o := orm.NewOrm()
+	id, err = o.Insert(m)
+	return
+}
+
+// GetProvidersById retrieves Providers by Id. Returns error if
+// Id doesn't exist
+func GetProvidersById(id int) (v *Providers, err error) {
+	o := orm.NewOrm()
+	v = &Providers{Id: id}
+	if err = o.Read(v); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
+
+// GetAllProviders retrieves all Providers matches certain condition. Returns empty list if
+// no records exist
+func GetAllProviders(query map[string]string, fields []string, sortby []string, order []string,
+	offset int64, limit int64) (ml []interface{}, err error) {
+	o := orm.NewOrm()
+	qs := o.QueryTable(new(Providers))
+	// query k=v
+	for k, v := range query {
+		// rewrite dot-notation to Object__Attribute
+		k = strings.Replace(k, ".", "__", -1)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
+	}
+	// order by:
+	var sortFields []string
+	if len(sortby) != 0 {
+		if len(sortby) == len(order) {
+			// 1) for each sort field, there is an associated order
+			for i, v := range sortby {
+				orderby := ""
+				if order[i] == "desc" {
+					orderby = "-" + v
+				} else if order[i] == "asc" {
+					orderby = v
+				} else {
+					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+				}
+				sortFields = append(sortFields, orderby)
+			}
+			qs = qs.OrderBy(sortFields...)
+		} else if len(sortby) != len(order) && len(order) == 1 {
+			// 2) there is exactly one order, all the sorted fields will be sorted by this order
+			for _, v := range sortby {
+				orderby := ""
+				if order[0] == "desc" {
+					orderby = "-" + v
+				} else if order[0] == "asc" {
+					orderby = v
+				} else {
+					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+				}
+				sortFields = append(sortFields, orderby)
+			}
+		} else if len(sortby) != len(order) && len(order) != 1 {
+			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
+		}
+	} else {
+		if len(order) != 0 {
+			return nil, errors.New("Error: unused 'order' fields")
+		}
+	}
+
+	var l []Providers
+	qs = qs.OrderBy(sortFields...)
+	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
+		if len(fields) == 0 {
+			for _, v := range l {
+				ml = append(ml, v)
+			}
+		} else {
+			// trim unused fields
+			for _, v := range l {
+				m := make(map[string]interface{})
+				val := reflect.ValueOf(v)
+				for _, fname := range fields {
+					m[fname] = val.FieldByName(fname).Interface()
+				}
+				ml = append(ml, m)
+			}
+		}
+		return ml, nil
+	}
+	return nil, err
+}
+
+// UpdateProviders updates Providers by Id and returns error if
+// the record to be updated doesn't exist
+func UpdateProvidersById(m *Providers) (err error) {
+	o := orm.NewOrm()
+	v := Providers{Id: m.Id}
+	// ascertain id exists in the database
+	if err = o.Read(&v); err == nil {
+		var num int64
+		if num, err = o.Update(m); err == nil {
+			fmt.Println("Number of records updated in database:", num)
+		}
+	}
+	return
+}
+
+// DeleteProviders deletes Providers by Id and returns error if
+// the record to be deleted doesn't exist
+func DeleteProviders(id int) (err error) {
+	o := orm.NewOrm()
+	v := Providers{Id: id}
+	// ascertain id exists in the database
+	if err = o.Read(&v); err == nil {
+		var num int64
+		if num, err = o.Delete(&Providers{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
+	}
+	return
+}
+
+type Products struct {
+	Id          int       `orm:"column(id);auto"`
+	CreatedAt   time.Time `orm:"column(created_at);type(timestamp);null"`
+	UpdatedAt   time.Time `orm:"column(updated_at);type(timestamp);null"`
+	DeletedAt   time.Time `orm:"column(deleted_at);type(timestamp);null"`
+	Name        string    `orm:"column(name);size(255);null"`
+	Description string    `orm:"column(description);size(255);null"`
+	ProviderId  string    `orm:"column(provider_id);"`
+	Category    string    `orm:"column(category);size(255);null"`
+	Active      string    `orm:"column(active);"`
+}
+
+func (t *Products) TableName() string {
+	return "products"
+}
+
+// AddProducts insert a new Products into database and returns
+// last inserted Id on success.
+func AddProducts(m *Products) (id int64, err error) {
+	o := orm.NewOrm()
+	id, err = o.Insert(m)
+	return
+}
+
+// GetProductsById retrieves Products by Id. Returns error if
+// Id doesn't exist
+func GetProductsById(id int) (v *Products, err error) {
+	o := orm.NewOrm()
+	v = &Products{Id: id}
+	if err = o.Read(v); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
+
+// GetAllProducts retrieves all Products matches certain condition. Returns empty list if
+// no records exist
+func GetAllProducts(query map[string]string, fields []string, sortby []string, order []string,
+	offset int64, limit int64) (ml []interface{}, err error) {
+	o := orm.NewOrm()
+	qs := o.QueryTable(new(Products))
+	// query k=v
+	for k, v := range query {
+		// rewrite dot-notation to Object__Attribute
+		k = strings.Replace(k, ".", "__", -1)
+		if strings.Contains(k, "isnull") {
+			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else {
+			qs = qs.Filter(k, v)
+		}
+	}
+	// order by:
+	var sortFields []string
+	if len(sortby) != 0 {
+		if len(sortby) == len(order) {
+			// 1) for each sort field, there is an associated order
+			for i, v := range sortby {
+				orderby := ""
+				if order[i] == "desc" {
+					orderby = "-" + v
+				} else if order[i] == "asc" {
+					orderby = v
+				} else {
+					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+				}
+				sortFields = append(sortFields, orderby)
+			}
+			qs = qs.OrderBy(sortFields...)
+		} else if len(sortby) != len(order) && len(order) == 1 {
+			// 2) there is exactly one order, all the sorted fields will be sorted by this order
+			for _, v := range sortby {
+				orderby := ""
+				if order[0] == "desc" {
+					orderby = "-" + v
+				} else if order[0] == "asc" {
+					orderby = v
+				} else {
+					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+				}
+				sortFields = append(sortFields, orderby)
+			}
+		} else if len(sortby) != len(order) && len(order) != 1 {
+			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
+		}
+	} else {
+		if len(order) != 0 {
+			return nil, errors.New("Error: unused 'order' fields")
+		}
+	}
+
+	var l []Products
+	qs = qs.OrderBy(sortFields...)
+	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
+		if len(fields) == 0 {
+			for _, v := range l {
+				ml = append(ml, v)
+			}
+		} else {
+			// trim unused fields
+			for _, v := range l {
+				m := make(map[string]interface{})
+				val := reflect.ValueOf(v)
+				for _, fname := range fields {
+					m[fname] = val.FieldByName(fname).Interface()
+				}
+				ml = append(ml, m)
+			}
+		}
+		return ml, nil
+	}
+	return nil, err
+}
+
+// UpdateProducts updates Products by Id and returns error if
+// the record to be updated doesn't exist
+func UpdateProductsById(m *Products) (err error) {
+	o := orm.NewOrm()
+	v := Products{Id: m.Id}
+	// ascertain id exists in the database
+	if err = o.Read(&v); err == nil {
+		var num int64
+		if num, err = o.Update(m); err == nil {
+			fmt.Println("Number of records updated in database:", num)
+		}
+	}
+	return
+}
+
+// DeleteProducts deletes Products by Id and returns error if
+// the record to be deleted doesn't exist
+func DeleteProducts(id int) (err error) {
+	o := orm.NewOrm()
+	v := Products{Id: id}
+	// ascertain id exists in the database
+	if err = o.Read(&v); err == nil {
+		var num int64
+		if num, err = o.Delete(&Products{Id: id}); err == nil {
+			fmt.Println("Number of records deleted in database:", num)
+		}
+	}
+	return
+}
+
 // Register models with the Beego ORM
 func init() {
-	orm.RegisterModel(new(LifeInsurance), new(FuneralInsurances), new(HomeInsurances), new(MortgageInsurances))
+	orm.RegisterModel(new(LifeInsurance), new(FuneralInsurances), new(HomeInsurances), new(MortgageInsurances), new(Providers), new(Products))
 }
