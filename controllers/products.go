@@ -22,6 +22,7 @@ func (c *ProductsController) URLMapping() {
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
+
 }
 
 // Post ...

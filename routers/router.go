@@ -19,7 +19,10 @@ func init() {
 	beego.Router("/home_profile/:id", &controllers.HomeInsurancesController{}, "get:GetOne")
 	beego.Router("/mortgage_profile/:id", &controllers.MortgageInsurancesController{}, "get:GetOne")
 	beego.Router("/provider/:id", &controllers.ProvidersController{}, "get:GetOne")
+	// http://localhost:8080/product/cat/life?query=category:life
+	beego.Router("/product/cat/:cat", &controllers.ProductsController{}, "get:GetAll")
 	beego.Router("/product/:id", &controllers.ProductsController{}, "get:GetOne")
+
 	//beego.Router("/profile", &controllers.ProfileController{}, "get:Get")
 	//beego.Router("/profile", &controllers.ProfileController{}, "post:Post")
 	beego.Router("/security", &controllers.SecurityController{}, "get:Get")
