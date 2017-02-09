@@ -1,0 +1,18 @@
+<script src="/static/plugins/jquery/jquery-2.2.0.min.js"></script>
+<script src="/static/plugins/materialize/js/materialize.min.js"></script>
+<script src="/static/plugins/material-preloader/js/materialPreloader.min.js"></script>
+<script src="/static/plugins/jquery-blockui/jquery.blockui.js"></script>
+<script src="/static/js/alpha.min.js"></script>
+<script src="/static/plugins/peity/jquery.peity.min.js"></script>
+
+<script>
+    // Peity Chart
+    $.fn.peity.defaults.pie = {
+        delimiter: null,
+        fill: ["#26A69A", "#e0e0e0", "#b2dfdb"],
+        height: null,
+        radius: 8,
+        width: null
+    };
+    $("span.pie").peity("pie")
+</script>
