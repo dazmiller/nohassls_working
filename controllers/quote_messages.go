@@ -10,13 +10,13 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// QuoteContactRequestsController operations for QuoteContactRequests
-type QuoteContactRequestsController struct {
+// QuoteMessagesController operations for QuoteMessages
+type QuoteMessagesController struct {
 	beego.Controller
 }
 
 // URLMapping ...
-func (c *QuoteContactRequestsController) URLMapping() {
+func (c *QuoteMessagesController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
@@ -26,15 +26,15 @@ func (c *QuoteContactRequestsController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description create QuoteContactRequests
-// @Param	body		body 	models.QuoteContactRequests	true		"body for QuoteContactRequests content"
-// @Success 201 {int} models.QuoteContactRequests
+// @Description create QuoteMessages
+// @Param	body		body 	models.QuoteMessages	true		"body for QuoteMessages content"
+// @Success 201 {int} models.QuoteMessages
 // @Failure 403 body is empty
 // @router / [post]
-func (c *QuoteContactRequestsController) Post() {
-	var v models.QuoteContactRequests
+func (c *QuoteMessagesController) Post() {
+	var v models.QuoteMessages
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if _, err := models.AddQuoteContactRequests(&v); err == nil {
+		if _, err := models.AddQuoteMessages(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = v
 		} else {
@@ -48,15 +48,15 @@ func (c *QuoteContactRequestsController) Post() {
 
 // GetOne ...
 // @Title Get One
-// @Description get QuoteContactRequests by id
+// @Description get QuoteMessages by id
 // @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.QuoteContactRequests
+// @Success 200 {object} models.QuoteMessages
 // @Failure 403 :id is empty
 // @router /:id [get]
-func (c *QuoteContactRequestsController) GetOne() {
+func (c *QuoteMessagesController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetQuoteContactRequestsById(id)
+	v, err := models.GetQuoteMessagesById(id)
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
@@ -67,17 +67,17 @@ func (c *QuoteContactRequestsController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get QuoteContactRequests
+// @Description get QuoteMessages
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.QuoteContactRequests
+// @Success 200 {object} models.QuoteMessages
 // @Failure 403
 // @router / [get]
-func (c *QuoteContactRequestsController) GetAll() {
+func (c *QuoteMessagesController) GetAll() {
 	var fields []string
 	var sortby []string
 	var order []string
@@ -119,7 +119,7 @@ func (c *QuoteContactRequestsController) GetAll() {
 		}
 	}
 
-	l, err := models.GetAllQuoteContactRequests(query, fields, sortby, order, offset, limit)
+	l, err := models.GetAllQuoteMessages(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
@@ -130,18 +130,18 @@ func (c *QuoteContactRequestsController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description update the QuoteContactRequests
+// @Description update the QuoteMessages
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.QuoteContactRequests	true		"body for QuoteContactRequests content"
-// @Success 200 {object} models.QuoteContactRequests
+// @Param	body		body 	models.QuoteMessages	true		"body for QuoteMessages content"
+// @Success 200 {object} models.QuoteMessages
 // @Failure 403 :id is not int
 // @router /:id [put]
-func (c *QuoteContactRequestsController) Put() {
+func (c *QuoteMessagesController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	v := models.QuoteContactRequests{Id: id}
+	v := models.QuoteMessages{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if err := models.UpdateQuoteContactRequestsById(&v); err == nil {
+		if err := models.UpdateQuoteMessagesById(&v); err == nil {
 			c.Data["json"] = "OK"
 		} else {
 			c.Data["json"] = err.Error()
@@ -154,15 +154,15 @@ func (c *QuoteContactRequestsController) Put() {
 
 // Delete ...
 // @Title Delete
-// @Description delete the QuoteContactRequests
+// @Description delete the QuoteMessages
 // @Param	id		path 	string	true		"The id you want to delete"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty
 // @router /:id [delete]
-func (c *QuoteContactRequestsController) Delete() {
+func (c *QuoteMessagesController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	if err := models.DeleteQuoteContactRequests(id); err == nil {
+	if err := models.DeleteQuoteMessages(id); err == nil {
 		c.Data["json"] = "OK"
 	} else {
 		c.Data["json"] = err.Error()
