@@ -2858,7 +2858,7 @@ table.add-manage-table>tbody>tr>th {
 
 .form-control {
     background-color: #FFF;
-    border: 1px solid transparent;
+    border: 1px solid #ccc;
     border-radius: 0;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075);
     color: #444;

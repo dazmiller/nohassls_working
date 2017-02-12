@@ -1,6 +1,12 @@
 package controllers
 
 import (
+	"encoding/json"
+	"errors"
+	"nohassls_material2/models"
+	"strconv"
+	"strings"
+
 	"github.com/astaxie/beego"
 )
 
@@ -9,6 +15,16 @@ type ProfileController struct {
 }
 
 func (this *ProfileController) Profile() {
+	idStr := this.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+
+	// load profile by id
+	v, _ := models.GetProfileById(id)
+	this.Data["data"] = v
+	// load life insurance profile using profileid ( ie userid)
+	i, _ := models.GetLifeInsuranceByProfileId(v.UserId)
+	this.Data["life"] = i
+
 	this.LayoutSections = make(map[string]string)
 	this.TplName = "release/profile.html"
 	this.Layout = "release/layout.html"
@@ -28,222 +44,159 @@ func (this *ProfileController) ProfileClose() {
 	this.LayoutSections["Footer"] = "release/footer.html"
 }
 
-/*
-
-import "github.com/astaxie/beego"
-
-type ProfileController struct {
-	beego.Controller
+// URLMapping ...
+func (c *ProfileController) URLMapping() {
+	c.Mapping("Post", c.Post)
+	c.Mapping("GetOne", c.GetOne)
+	c.Mapping("GetAll", c.GetAll)
+	c.Mapping("Put", c.Put)
+	c.Mapping("Delete", c.Delete)
 }
 
-
-func (this *ProfileController) Post() {
-
-	u := models.Profile{}
-	if err := this.ParseForm(&u); err != nil {
-
-		o := orm.NewOrm()
-
-		//o.Insert(u)
-		fmt.Println(o.Insert(u))
-		this.LayoutSections = make(map[string]string)
-		this.TplName = "public/profile.html"
-		this.Layout = "public/layout.html"
-		this.LayoutSections["PageScripts"] = "public/scripts_profile.html"
-	}
-	this.LayoutSections = make(map[string]string)
-	this.TplName = "public/profile.html"
-	this.Layout = "public/layout.html"
-	this.LayoutSections["PageScripts"] = "public/scripts_profile.html"
-}
-
-//
-//
-//
-func (this *ProfileController) Get() {
-	flash := beego.ReadFromRequest(&this.Controller)
-
-	if _, ok := flash.Data["notice"]; ok {
-	}
-
-	o := orm.NewOrm()
-	o.Using("default")
-
-	var profile []*models.Profile
-
-	num, err := o.QueryTable("profiles").OrderBy("-id").All(&profile)
-
-	if err != orm.ErrNoRows && num > 0 {
-		this.TplName = "public/profile.html"
-		this.Data["articles"] = profile
-	} else {
-		// No result
-		this.TplName = "blog/error.tpl"
-		this.Data["error"] = "No article in the database"
-	}
-	this.LayoutSections = make(map[string]string)
-	this.Data["title"] = "My blog"
-	this.Layout = "public/layout.html"
-	this.LayoutSections["PageScripts"] = "public/scripts_profile.html"
-}
-
-func (this *ProfileController) GetOne() {
-	o := orm.NewOrm()
-	o.Using("default")
-
-	// Get the ID page
-	articlesId := this.Ctx.Input.Param(":id")
-
-	var articles []*models.Articles
-
-	err := o.QueryTable("articles").Filter("id", articlesId).One(&articles)
-
-	if err == orm.ErrNoRows {
-		// No result
-		this.TplName = "blog/error.tpl"
-		this.Data["title"] = "Error :("
-		this.Data["error"] = "No available article"
-	} else {
-		this.TplName = "blog/content.tpl"
-		for _, data := range articles {
-			this.Data["title"] = data.Title
-			this.Data["content"] = data.Content
-		}
-
-	}
-
-	this.Layout = "blog/layout_blog.tpl"
-}
-
-func (this *ProfileController) Add() {
-	o := orm.NewOrm()
-	o.Using("default")
-
-	articles := models.Articles{}
-
-	this.Data["Form"] = &articles
-
-	if err := this.ParseForm(&articles); err != nil {
-		beego.Error("Couldn't parse the form. Reason: ", err)
-	} else {
-		valid := validation.Validation{}
-		valid.Required(articles.Title, "Title")
-		valid.Required(articles.Content, "Content")
-		isValid, _ := valid.Valid(articles)
-
-		if this.Ctx.Input.Method() == "POST" {
-
-			if !isValid {
-				this.Data["errors"] = valid.ErrorsMap
-				for _, err := range valid.Errors {
-					beego.Error(err.Key, err.Message)
-				}
-			} else {
-				_, err := o.Insert(&articles)
-				flash := beego.NewFlash()
-
-				if err == nil {
-					flash.Notice("Article " + articles.Title + " added")
-					flash.Store(&this.Controller)
-					this.Redirect("/blog", 302)
-				} else {
-					beego.Debug("Couldn't insert new article. Reason: ", err)
-				}
-			}
-
-		}
-
-	}
-
-	this.Layout = "blog/layout_blog.tpl"
-	this.TplName = "blog/form.tpl"
-	this.Data["title"] = "Add an article"
-}
-
-func (this *ProfileController) Edit() {
-	o := orm.NewOrm()
-	o.Using("default")
-
-	articlesId, _ := strconv.Atoi(this.Ctx.Input.Param(":id"))
-
-	articles := models.Articles{}
-
-	flash := beego.NewFlash()
-
-	err := o.QueryTable("articles").Filter("id", articlesId).One(&articles)
-
-	if err != orm.ErrNoRows {
-
-		this.Data["Form"] = &articles
-
-		if err := this.ParseForm(&articles); err != nil {
-			beego.Error("Couldn't parse the form. Reason: ", err)
+// Post ...
+// @Title Post
+// @Description create profile
+// @Param	body		body 	models.profile	true		"body for profile content"
+// @Success 201 {int} models.profile
+// @Failure 403 body is empty
+// @router / [post]
+func (c *ProfileController) Post() {
+	var v models.Profile
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if _, err := models.AddProfile(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
 		} else {
-			valid := validation.Validation{}
-			valid.Required(articles.Title, "Title")
-			valid.Required(articles.Content, "Content")
-			isValid, _ := valid.Valid(articles)
+			c.Data["json"] = err.Error()
+		}
+	} else {
+		c.Data["json"] = err.Error()
+	}
+	c.ServeJSON()
+}
 
-			if this.Ctx.Input.Method() == "POST" {
+// GetOne ...
+// @Title Get One
+// @Description get profile by id
+// @Param	id		path 	string	true		"The key for staticblock"
+// @Success 200 {object} models.profile
+// @Failure 403 :id is empty
+// @router /:id [get]
+func (c *ProfileController) GetOne() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	v, err := models.GetProfileById(id)
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		c.Data["json"] = v
+		//c.Data["profile"] = v
+	}
+	c.ServeJSON()
 
-				if !isValid {
-					this.Data["errors"] = valid.ErrorsMap
-					beego.Error("Form didn't validate.")
-				} else {
-					_, err := o.Update(&articles)
+}
 
-					if err == nil {
-						flash.Notice("Article " + articles.Title + " updated")
-						flash.Store(&this.Controller)
+// GetAll ...
+// @Title Get All
+// @Description get profile
+// @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
+// @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
+// @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
+// @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
+// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
+// @Param	offset	query	string	false	"Start position of result set. Must be an integer"
+// @Success 200 {object} models.profile
+// @Failure 403
+// @router / [get]
+func (c *ProfileController) GetAll() {
+	var fields []string
+	var sortby []string
+	var order []string
+	var query = make(map[string]string)
+	var limit int64 = 10
+	var offset int64
 
-						this.Redirect("/blog", 302)
-					} else {
-						beego.Debug("Couldn't update new article. Reason: ", err)
-					}
-				}
-
+	// fields: col1,col2,entity.col3
+	if v := c.GetString("fields"); v != "" {
+		fields = strings.Split(v, ",")
+	}
+	// limit: 10 (default is 10)
+	if v, err := c.GetInt64("limit"); err == nil {
+		limit = v
+	}
+	// offset: 0 (default is 0)
+	if v, err := c.GetInt64("offset"); err == nil {
+		offset = v
+	}
+	// sortby: col1,col2
+	if v := c.GetString("sortby"); v != "" {
+		sortby = strings.Split(v, ",")
+	}
+	// order: desc,asc
+	if v := c.GetString("order"); v != "" {
+		order = strings.Split(v, ",")
+	}
+	// query: k:v,k:v
+	if v := c.GetString("query"); v != "" {
+		for _, cond := range strings.Split(v, ",") {
+			kv := strings.SplitN(cond, ":", 2)
+			if len(kv) != 2 {
+				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.ServeJSON()
+				return
 			}
-
+			k, v := kv[0], kv[1]
+			query[k] = v
 		}
-
-		this.Data["title"] = "Edit this article"
-		this.Layout = "blog/layout_blog.tpl"
-		this.TplName = "blog/form.tpl"
-
-	} else {
-		flash.Notice("Article #%d doesn't exists", articlesId)
-		flash.Store(&this.Controller)
-		this.Redirect("/blog", 302)
 	}
 
+	l, err := models.GetAllProfile(query, fields, sortby, order, offset, limit)
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		c.Data["json"] = l
+	}
+	c.ServeJSON()
 }
 
-func (this *ProfileController) Delete() {
-	o := orm.NewOrm()
-	o.Using("default")
-
-	articlesId, _ := strconv.Atoi(this.Ctx.Input.Param(":id"))
-
-	articles := models.Articles{}
-
-	flash := beego.NewFlash()
-
-	if exist := o.QueryTable(articles.TableName()).Filter("Id", articlesId).Exist(); exist {
-
-		if num, err := o.Delete(&models.Articles{Id: articlesId}); err == nil {
-			beego.Info("Record Deleted. ", num)
-			flash.Notice("Article #%d deleted", articlesId)
+// Put ...
+// @Title Put
+// @Description update the profile
+// @Param	id		path 	string	true		"The id you want to update"
+// @Param	body		body 	models.profile	true		"body for profile content"
+// @Success 200 {object} models.profile
+// @Failure 403 :id is not int
+// @router /:id [put]
+func (c *ProfileController) Put() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	v := models.Profile{Id: id}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if err := models.UpdateProfileById(&v); err == nil {
+			c.Data["json"] = "OK"
 		} else {
-			beego.Error("Record couldn't be deleted. Reason: ", err)
+			c.Data["json"] = err.Error()
 		}
-
 	} else {
-		flash.Notice("Article #%d doesn't exists", articlesId)
+		c.Data["json"] = err.Error()
 	}
-
-	flash.Store(&this.Controller)
-
-	this.Redirect("/blog", 302)
+	c.ServeJSON()
 }
 
-*/
+// Delete ...
+// @Title Delete
+// @Description delete the profile
+// @Param	id		path 	string	true		"The id you want to delete"
+// @Success 200 {string} delete success!
+// @Failure 403 id is empty
+// @router /:id [delete]
+func (c *ProfileController) Delete() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	if err := models.DeleteProfile(id); err == nil {
+		c.Data["json"] = "OK"
+	} else {
+		c.Data["json"] = err.Error()
+	}
+	c.ServeJSON()
+}

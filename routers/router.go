@@ -12,14 +12,16 @@ func init() {
 	beego.Router("/life", &controllers.MainController{}, "get:GetLandingPage")
 	beego.Router("/life_quotes", &controllers.LifeControllerPage{}, "get:LifeQuotes")
 	beego.Router("/life_explore", &controllers.LifeControllerPage{}, "get:LifeExplore")
-	beego.Router("/profile", &controllers.ProfileController{}, "get:Profile")
-	beego.Router("/profile_close", &controllers.ProfileController{}, "get:ProfileClose")
 	beego.Router("/life_profile/:id", &controllers.LifeInsuranceController{}, "get:GetOne")
+	beego.Router("/profile/:id", &controllers.ProfileController{}, "get:Profile")
+	beego.Router("/profile_close", &controllers.ProfileController{}, "get:ProfileClose")
+	beego.Router("/profile", &controllers.ProfileController{}, "post:Post")
+
 	beego.Router("/funeral_profile/:id", &controllers.FuneralInsurancesController{}, "get:GetOne")
 	beego.Router("/home_profile/:id", &controllers.HomeInsurancesController{}, "get:GetOne")
 	beego.Router("/mortgage_profile/:id", &controllers.MortgageInsurancesController{}, "get:GetOne")
 	// http://localhost:8080/provider/1
-	beego.Router("/provider/:id", &controllers.ProvidersController{}, "get:GetOne")
+	beego.Router("/provider/:id", &controllers.ProvidersController{}, "get:ShowCompanyProfile")
 	// http://localhost:8080/product/cat/life?query=category:life
 	beego.Router("/product/cat/:cat", &controllers.ProductsController{}, "get:GetAll")
 	beego.Router("/product/:id", &controllers.ProductsController{}, "get:GetOne")

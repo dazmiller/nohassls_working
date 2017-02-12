@@ -15,6 +15,23 @@ type ProvidersController struct {
 	beego.Controller
 }
 
+func (this *ProvidersController) ShowCompanyProfile() {
+	idStr := this.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+
+	// load provider profile by id
+	v, _ := models.GetProvidersById(id)
+	this.Data["data"] = v
+
+	this.LayoutSections = make(map[string]string)
+	this.TplName = "release/ads-details.html"
+	this.Layout = "release/layout.html"
+	this.LayoutSections["header"] = "release/header.html"
+	this.LayoutSections["Content"] = "release/ads-details.html"
+	this.LayoutSections["Feature"] = "release/feature.html"
+	this.LayoutSections["Footer"] = "release/footer.html"
+}
+
 // URLMapping ...
 func (c *ProvidersController) URLMapping() {
 	c.Mapping("Post", c.Post)

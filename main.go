@@ -27,6 +27,21 @@ func main() {
 	//	if err != nil {
 	//	beego.Debug(err)
 	//	}
-
+	beego.AddFuncMap("setchecked", SetChecked)
 	beego.Run()
+	// add simple helper function for setting checkbox chceked values
+
+}
+
+// simple function to return checked if value =1 for checkboxes and blank if null or 0
+func SetChecked(in int) (out string) {
+	switch in {
+	case 1:
+		out = "checked"
+	case 0:
+		out = ""
+	default:
+		out = ""
+	}
+	return
 }
