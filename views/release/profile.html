@@ -80,7 +80,7 @@
                     <div id="accordion" class="panel-group">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="panel-title"> <a href="#collapseB1" data-toggle="collapse"> My details </a> </h4>
+                                <h4 class="panel-title"> <a href="#collapseB1" data-toggle="collapse"><i class=" fa fa-arrows"></i>  My details </a> </h4>
                             </div>
                             <div class="panel-collapse collapse in" id="collapseB1">
                                 <div class="panel-body">
@@ -98,7 +98,7 @@
                                             <input class="form-control" placeholder="Your Surname" type="text" value="{{.data.Surname}}">
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">BirthDate</label>
+                                            <label class="control-label">BirthDate (dd-MM-YYYY)</label>
                                             <input type="date" class="form-control" id="birthdate" placeholder="Date of Birth" value="{{.data.Birthdate}}">
 
                                         </div>
@@ -132,77 +132,371 @@
                                                 <a class=" "> <i class="fa fa-minus-circle "></i></a>
                                             </div>
                                         </div>
-                                        <div class="form-group ">
-                                            <button type="submit " class="btn btn-common ">Update</button>
-                                        </div>
-                                    </form>
+
+
                                 </div>
                             </div>
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseB2" data-toggle="collapse"> Life Insurance Profile </a> </h4>
+                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseB2" data-toggle="collapse"><i class=" fa fa-users"></i> Life Insurance </a> </h4>
                             </div>
                             <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapseB2">
                                 <div class="panel-body">
-                                    <form role="form">
-                                        <div class="form-group ">
-                                            <label for="Phone " class="control-label "> Country Of Residence</label>
-                                            <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="Smoker " class="control-label ">Have you smoked tobacco or any substance in the last 12 months?</label>
-                                            <div class="checkbox">
-                                                <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Yes </label>
-                                            </div>
-                                        </div>
 
-
+                                    <div class="form-group ">
+                                        <label for="Phone " class="control-label "> Country Of Residence</label>
+                                        <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="Smoker " class="control-label ">Smoker</label>
                                         <div class="checkbox">
-                                            <label><input type="checkbox"><span class="checkbox-material"><span class="check"></span></span>Comments are enabled on my ads </label>
+                                            <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Have you smoked tobacco or any substance in the last 12 months? </label>
                                         </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="LastSmoked " class="control-label "> If you used to smoke, how many years ago did you give up?</label>
+                                        <input class="form-control " id="LastSmoked " placeholder=" " data-mask="9?" type="text" value="{{.life.LastSmoked}}">
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="CoverAmount " class="control-label "> How much cover would you like? ($100,000 - $5,000,000)</label>
+                                        <input class="form-control " id="CoverAmount " data-mask="999-999-???" type="text" value="{{.life.CoverAmount}}">
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="Height " class="control-label "> How tall are you? (cm)</label>
+                                        <input class="form-control " id="Height " data-mask="99?" type="text" value="{{.life.Height}}">
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="Weight " class="control-label "> What is your current weight (kg)</label>
+                                        <input class="form-control " id="Weight " data-mask="99?" type="text" value="{{.life.Weight}}">
+                                    </div>
 
-                                        <div class="form-group is-empty">
-                                            <label class="control-label">New Password</label>
-                                            <input class="form-control" placeholder="" type="password">
-                                            <span class="material-input"></span></div>
-                                        <div class="form-group is-empty">
-                                            <label class="control-label">Confirm Password</label>
-                                            <input class="form-control" placeholder="" type="password">
-                                            <span class="material-input"></span></div>
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-common">Update</button>
-                                        </div>
-                                    </form>
+
+
+
+
                                 </div>
                             </div>
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseB3" data-toggle="collapse"> Health Insurance Profile </a> </h4>
+                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapsehealth" data-toggle="collapse"> Health Insurance </a> </h4>
                             </div>
-                            <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapseB3">
+                            <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapsehealth">
                                 <div class="panel-body">
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <div class="checkbox">
-                                                <label><input type="checkbox"><span class="checkbox-material"><span class="check"></span></span>I want to receive newsletter. </label>
+
+                                            <div class="form-group ">
+                                                <label for="Phone " class="control-label "> Country Of Residence</label>
+                                                <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
                                             </div>
-                                            <div class="checkbox">
-                                                <label><input type="checkbox"><span class="checkbox-material"><span class="check"></span></span>I want to receive advice on buying and selling. </label>
+                                            <div class="form-group ">
+                                                <label for="Smoker " class="control-label ">Smoker</label>
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Have you smoked tobacco or any substance in the last 12 months? </label>
+                                                </div>
                                             </div>
+                                            <div class="form-group ">
+                                                <label for="LastSmoked " class="control-label "> If you used to smoke, how many years ago did you give up?</label>
+                                                <input class="form-control " id="LastSmoked " placeholder=" " data-mask="9?" type="text" value="{{.life.LastSmoked}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="CoverAmount " class="control-label "> How much cover would you like? ($100,000 - $5,000,000)</label>
+                                                <input class="form-control " id="CoverAmount " data-mask="999-999-???" type="text" value="{{.life.CoverAmount}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Height " class="control-label "> How tall are you? (cm)</label>
+                                                <input class="form-control " id="Height " data-mask="99?" type="text" value="{{.life.Height}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Weight " class="control-label "> What is your current weight (kg)</label>
+                                                <input class="form-control " id="Weight " data-mask="99?" type="text" value="{{.life.Weight}}">
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseTravel" data-toggle="collapse"><i class=" fa fa-plane"></i> Travel Insurance </a> </h4>
+                            </div>
+                            <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapseTravel">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+
+                                            <div class="form-group ">
+                                                <label for="Phone " class="control-label "> Country Of Residence</label>
+                                                <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Smoker " class="control-label ">Smoker</label>
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Have you smoked tobacco or any substance in the last 12 months? </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="LastSmoked " class="control-label "> If you used to smoke, how many years ago did you give up?</label>
+                                                <input class="form-control " id="LastSmoked " placeholder=" " data-mask="9?" type="text" value="{{.life.LastSmoked}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="CoverAmount " class="control-label "> How much cover would you like? ($100,000 - $5,000,000)</label>
+                                                <input class="form-control " id="CoverAmount " data-mask="999-999-???" type="text" value="{{.life.CoverAmount}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Height " class="control-label "> How tall are you? (cm)</label>
+                                                <input class="form-control " id="Height " data-mask="99?" type="text" value="{{.life.Height}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Weight " class="control-label "> What is your current weight (kg)</label>
+                                                <input class="form-control " id="Weight " data-mask="99?" type="text" value="{{.life.Weight}}">
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseTPD" data-toggle="collapse"> TPD Insurance </a> </h4>
+                            </div>
+                            <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapseTPD">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+
+                                            <div class="form-group ">
+                                                <label for="Phone " class="control-label "> Country Of Residence</label>
+                                                <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Smoker " class="control-label ">Smoker</label>
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Have you smoked tobacco or any substance in the last 12 months? </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="LastSmoked " class="control-label "> If you used to smoke, how many years ago did you give up?</label>
+                                                <input class="form-control " id="LastSmoked " placeholder=" " data-mask="9?" type="text" value="{{.life.LastSmoked}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="CoverAmount " class="control-label "> How much cover would you like? ($100,000 - $5,000,000)</label>
+                                                <input class="form-control " id="CoverAmount " data-mask="999-999-???" type="text" value="{{.life.CoverAmount}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Height " class="control-label "> How tall are you? (cm)</label>
+                                                <input class="form-control " id="Height " data-mask="99?" type="text" value="{{.life.Height}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Weight " class="control-label "> What is your current weight (kg)</label>
+                                                <input class="form-control " id="Weight " data-mask="99?" type="text" value="{{.life.Weight}}">
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseIncome" data-toggle="collapse"> Income Insurance </a> </h4>
+                            </div>
+                            <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapseIncome">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+
+                                            <div class="form-group ">
+                                                <label for="Phone " class="control-label "> Country Of Residence</label>
+                                                <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Smoker " class="control-label ">Smoker</label>
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Have you smoked tobacco or any substance in the last 12 months? </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="LastSmoked " class="control-label "> If you used to smoke, how many years ago did you give up?</label>
+                                                <input class="form-control " id="LastSmoked " placeholder=" " data-mask="9?" type="text" value="{{.life.LastSmoked}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="CoverAmount " class="control-label "> How much cover would you like? ($100,000 - $5,000,000)</label>
+                                                <input class="form-control " id="CoverAmount " data-mask="999-999-???" type="text" value="{{.life.CoverAmount}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Height " class="control-label "> How tall are you? (cm)</label>
+                                                <input class="form-control " id="Height " data-mask="99?" type="text" value="{{.life.Height}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Weight " class="control-label "> What is your current weight (kg)</label>
+                                                <input class="form-control " id="Weight " data-mask="99?" type="text" value="{{.life.Weight}}">
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseBPet" data-toggle="collapse"> Pet Insurance </a> </h4>
+                            </div>
+                            <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapseBPet">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+
+                                            <div class="form-group ">
+                                                <label for="Phone " class="control-label "> Country Of Residence</label>
+                                                <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Smoker " class="control-label ">Smoker</label>
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Have you smoked tobacco or any substance in the last 12 months? </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="LastSmoked " class="control-label "> If you used to smoke, how many years ago did you give up?</label>
+                                                <input class="form-control " id="LastSmoked " placeholder=" " data-mask="9?" type="text" value="{{.life.LastSmoked}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="CoverAmount " class="control-label "> How much cover would you like? ($100,000 - $5,000,000)</label>
+                                                <input class="form-control " id="CoverAmount " data-mask="999-999-???" type="text" value="{{.life.CoverAmount}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Height " class="control-label "> How tall are you? (cm)</label>
+                                                <input class="form-control " id="Height " data-mask="99?" type="text" value="{{.life.Height}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Weight " class="control-label "> What is your current weight (kg)</label>
+                                                <input class="form-control " id="Weight " data-mask="99?" type="text" value="{{.life.Weight}}">
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseHome" data-toggle="collapse"> Home Insurance </a> </h4>
+                            </div>
+                            <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapseHome">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+
+                                            <div class="form-group ">
+                                                <label for="Phone " class="control-label "> Country Of Residence</label>
+                                                <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Smoker " class="control-label ">Smoker</label>
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Have you smoked tobacco or any substance in the last 12 months? </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="LastSmoked " class="control-label "> If you used to smoke, how many years ago did you give up?</label>
+                                                <input class="form-control " id="LastSmoked " placeholder=" " data-mask="9?" type="text" value="{{.life.LastSmoked}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="CoverAmount " class="control-label "> How much cover would you like? ($100,000 - $5,000,000)</label>
+                                                <input class="form-control " id="CoverAmount " data-mask="999-999-???" type="text" value="{{.life.CoverAmount}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Height " class="control-label "> How tall are you? (cm)</label>
+                                                <input class="form-control " id="Height " data-mask="99?" type="text" value="{{.life.Height}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Weight " class="control-label "> What is your current weight (kg)</label>
+                                                <input class="form-control " id="Weight " data-mask="99?" type="text" value="{{.life.Weight}}">
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> <a aria-expanded="false" class="collapsed" href="#collapseCar" data-toggle="collapse"> Car Insurance  </a> </h4>
+                            </div>
+                            <div style="height: 0px;" aria-expanded="false" class="panel-collapse collapse" id="collapseCar">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+
+                                            <div class="form-group ">
+                                                <label for="Phone " class="control-label "> Country Of Residence</label>
+                                                <input class="form-control " id="CountryResidence " placeholder=" " type="text" value="{{.life.CountryResidence}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Smoker " class="control-label ">Smoker</label>
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="Smoker" id="Smoker" {{.life.Smoker | setchecked}}>Have you smoked tobacco or any substance in the last 12 months? </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="LastSmoked " class="control-label "> If you used to smoke, how many years ago did you give up?</label>
+                                                <input class="form-control " id="LastSmoked " placeholder=" " data-mask="9?" type="text" value="{{.life.LastSmoked}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="CoverAmount " class="control-label "> How much cover would you like? ($100,000 - $5,000,000)</label>
+                                                <input class="form-control " id="CoverAmount " data-mask="999-999-???" type="text" value="{{.life.CoverAmount}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Height " class="control-label "> How tall are you? (cm)</label>
+                                                <input class="form-control " id="Height " data-mask="99?" type="text" value="{{.life.Height}}">
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="Weight " class="control-label "> What is your current weight (kg)</label>
+                                                <input class="form-control " id="Weight " data-mask="99?" type="text" value="{{.life.Weight}}">
+                                            </div>
+
+
+
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="form-group ">
+                        <button type="submit " class="btn btn-common ">Update</button>
+                    </div>
+                    </form>
                 </div>
-
-
-
             </div>
+
+
         </div>
     </div>
+</div>
 </div>
 <!-- End Content -->

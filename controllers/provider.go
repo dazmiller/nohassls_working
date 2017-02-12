@@ -28,7 +28,7 @@ func (this *ProvidersController) ShowCompanyProfile() {
 	this.Layout = "release/layout.html"
 	this.LayoutSections["header"] = "release/header.html"
 	this.LayoutSections["Content"] = "release/ads-details.html"
-	this.LayoutSections["Feature"] = "release/feature.html"
+	//this.LayoutSections["Feature"] = "release/feature.html"
 	this.LayoutSections["Footer"] = "release/footer.html"
 }
 

@@ -1,10 +1,10 @@
 <!-- Page Header Start -->
-<div class="page-header" style="background: url(/static/img/banner1.jpg);">
+<div class="page-header" style="background: url(/static/img/provider/{{.data.Headerurl}});">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="breadcrumb-wrapper">
-                    <h2 class="page-title">My Profile {{.data.Firstname}}</h2>
+                    <h2 class="page-title">{{.data.CompanyName}}</h2>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
         <div class="row">
             <!-- Product Info Start -->
             <div class="product-info">
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <div class="inner-box ads-details-wrapper">
                         <h2>{{.data.CompanyName }}</h2>
                         <p class="item-intro"><span class="poster"><a href="{{.data.Website}}" target="_blank">{{.data.Website}}</a></span></p>
@@ -29,13 +29,13 @@
 
                         <div id="owl-demo" class="owl-carousel owl-theme">
                             <div class="item">
-                                <img src="/static/img/productinfo/img1.jpg" alt="">
+                                <img src="/static/img/provider/pinnaclesite.jpg" alt="">
                             </div>
                             <div class="item">
-                                <img src="/static/img/productinfo/img2.jpg" alt="">
+                                <img src="/static/img/provider/pinnaclesite.jpg" alt="">
                             </div>
                             <div class="item">
-                                <img src="/static/img/productinfo/img3.jpg" alt="">
+                                <img src="/static/img/provider/pinnaclesite.jpg" alt="">
                             </div>
                         </div>
                     </div>
@@ -45,6 +45,8 @@
                         <div class="row">
                             <div class="ads-details-info col-md-8">
                                 <p>{{.data.Information}}</p>
+                                <p>{{str2html .data.Blurb}}</p>
+                                <!--
                                 <ul class="list-circle">
                                     <li><i class="fa fa-check-circle"></i> 256GB PCIe flash storage</li>
                                     <li><i class="fa fa-check-circle"></i> 2.7 GHz dual-core Intel Core i5 processor</li>
@@ -55,42 +57,24 @@
                                     <li><i class="fa fa-check-circle"></i> 13.3" Retina Display</li>
                                     <li><i class="fa fa-check-circle"></i> Intect Box</li>
                                     <li><i class="fa fa-check-circle"></i> 1 Year international warranty</li>
+                                    </ul>
+                                    -->
                             </div>
                             <div class="col-md-4">
                                 <aside class="panel panel-body panel-details">
-                                    <ul>
-                                        <li>
-                                            <p class=" no-margin "><strong>Price:</strong> $ 1,045</p>
-                                        </li>
-                                        <li>
-                                            <p class="no-margin"><strong>Type:</strong> <a href="#">Electronics</a>, <a href="#">For sale</a></p>
-                                        </li>
-                                        <li>
-                                            <p class="no-margin"><strong>Location:</strong> <a href="#">New York</a></p>
-                                        </li>
-                                        <li>
-                                            <p class=" no-margin "><strong>Condition:</strong> New</p>
-                                        </li>
-                                        <li>
-                                            <p class="no-margin"><strong>Brand:</strong> <a href="#">Apple</a></p>
-                                        </li>
-                                    </ul>
-                                </aside>
-
-                                <div class="ads-action">
                                     <ul class="list-border">
                                         <li>
-                                            <a href="#"> <i class=" fa fa-phone"></i> 022445167532 </a>
+                                            <a href="#"> <i class=" fa fa-phone"></i> {{.data.Phone1}} </a>
                                         </li>
                                         <li>
                                             <li>
-                                                <a href="#"> <i class=" fa fa-user"></i> More ads by User </a>
+                                                <a href="{{.data.Website}} " target="_blank"> <i class=" fa fa-user"></i> {{.data.Website}} </a>
                                             </li>
                                             <li>
-                                                <a href="#"> <i class=" fa fa-heart"></i> Save ad </a>
+                                                <a href="mailto:{{.data.Email}}"> <i class=" fa fa-envelope"></i> {{.data.Email}}</a>
                                             </li>
                                             <li>
-                                                <a href="#"> <i class="fa fa-share-alt"></i> Share ad </a>
+                                                <a href="#"> <i class="fa fa-share-alt"></i> Social Links </a>
                                                 <div class="social-link">
                                                     <a class="twitter" target="_blank" data-original-title="twitter" href="#" data-toggle="tooltip" data-placement="top"><i class="fa fa-twitter"></i></a>
                                                     <a class="facebook" target="_blank" data-original-title="facebook" href="#" data-toggle="tooltip" data-placement="top"><i class="fa fa-facebook"></i></a>
@@ -100,23 +84,52 @@
 
                                             </li>
                                     </ul>
-                                </div>
+                                </aside>
+
+
+                            </div>
+                        </div>
+                        <BR>
+                        <BR>
+                        <ul class="nav nav-pills">
+                            <li class="active">
+                                <a href="#1b" data-toggle="tab"><i class=" fa fa-phone"></i>  Overview</a>
+                            </li>
+                            <li><a href="#2b" data-toggle="tab"><i class=" fa fa-arrows"></i>Products</a>
+                            </li>
+                            <li><a href="#3b" data-toggle="tab"><i class=" fa fa-phone"></i>Services</a>
+                            </li>
+                            <li><a href="#4a" data-toggle="tab"><i class=" fa fa-users"></i>People</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content clearfix">
+                            <div class="tab-pane active" id="1b">
+                                <BR>
+                                <p>Same as example 1 but we have now styled the tab's corner</p>
+                            </div>
+                            <div class="tab-pane" id="2b">
+                                <BR>
+                                <p>We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</p>
+                            </div>
+                            <div class="tab-pane" id="3b">
+                                <BR>
+                                <p>We applied clearfix to the tab-content to rid of the gap between the tab and the content</p>
+                            </div>
+                            <div class="tab-pane" id="4b">
+                                <BR>
+                                <p>We use css to change the background color of the content to be equal to the tab</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="inner-box">
-                        <div class="widget-title">
-                            <h4>Advertisement</h4>
-                        </div>
-                        <img src="/static/img/placeholder200x276.gif" alt="">
-                    </div>
-                </div>
 
+                </div>
             </div>
-            <!-- Product Info End -->
+
+
         </div>
+        <!-- Product Info End -->
     </div>
+</div>
 </div>
 <!-- End Content -->

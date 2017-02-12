@@ -1093,6 +1093,7 @@ type Providers struct {
 	MemberSince    time.Time `orm:"column(MemberSince);type(date);null"`
 	Logourl        string    `orm:"column(Logourl);size(255);null"`
 	Headerurl      string    `orm:"column(Headerurl);size(255);null"`
+	Blurb          string    `orm:"column(Blurb);type(text);null"`
 }
 
 func (t *Providers) TableName() string {
