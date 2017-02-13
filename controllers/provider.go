@@ -32,6 +32,12 @@ func (this *ProvidersController) ShowCompanyProfile() {
 	this.LayoutSections["Footer"] = "release/footer.html"
 }
 
+// get all products for the passed provider ID and cat id.
+// ie,provider:100, grab all products
+func (c *ProvidersController) ProductsByProvider() {
+	//return nil
+}
+
 // URLMapping ...
 func (c *ProvidersController) URLMapping() {
 	c.Mapping("Post", c.Post)

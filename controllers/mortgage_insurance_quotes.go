@@ -1,16 +1,6 @@
 package controllers
 
-import (
-	"encoding/json"
-	"errors"
-	"nohasslsapi/models"
-	"nohasslsapi/utils"
-	"strconv"
-	"strings"
-
-	"github.com/dazmiller/beego"
-)
-
+/*
 // oprations for MortgageInsuranceQuotes
 type MortgageQuotesController struct {
 	beego.Controller
@@ -184,3 +174,6 @@ func (c *MortgageQuotesController) Delete() {
 	}
 	c.ServeJSON()
 }
+
+
+*/

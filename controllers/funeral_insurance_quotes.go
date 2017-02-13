@@ -1,16 +1,6 @@
 package controllers
 
-import (
-	"encoding/json"
-	"errors"
-	"nohasslsapi/models"
-	"nohasslsapi/utils"
-	"strconv"
-	"strings"
-
-	"github.com/dazmiller/beego"
-)
-
+/*
 // oprations for FuneralInsuranceQuotes
 type FuneralQuotesController struct {
 	beego.Controller
@@ -184,3 +174,6 @@ func (c *FuneralQuotesController) Delete() {
 	}
 	c.ServeJSON()
 }
+
+
+*/
